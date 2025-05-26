@@ -111,7 +111,7 @@
         }
         
         .logo {
-            max-width: 350px;
+            max-width: 250px;
             height: auto;
             margin: 1.5rem auto 0;
             display: block;
@@ -381,6 +381,7 @@
             font-size: 1.5rem;
             transition: var(--transition);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
         }
         
         .social-btn:hover {
@@ -440,7 +441,7 @@
             <img alt="شعار ويفز" class="logo" src="https://i.ibb.co/4nFm7g4f/MAHMOUD-8243.gif" />
         </div>
         
-        <h2 id="mainHeading">عيد أضحى مبارك | Happy Eid Jal</h2>
+        <h2 id="mainHeading">عيد أضحى مبارك | Happy Eid </h2>
         
         <div class="input-group">
             <div class="input-container ar-label">
@@ -469,13 +470,13 @@
         <div class="result-container" id="resultContainer">
             <div class="success-message">
                 <span>✓</span>
-                <span id="successMessage">تم إنشاء تهنئتك الويفزية بنجاح!</span>
+                <span id="successMessage">تم إنشاء تهنئتك بنجاح!</span>
             </div>
             
             <canvas id="greetingCanvas"></canvas>
             
             <div class="download-share-container" id="downloadShareContainer">
-                <a download="تهنئة-عيد-جال].png" href="#" id="downloadButton">
+                <a download="تهنئة-عيد-جال.png" href="#" id="downloadButton">
                     <span>📥</span>
                     <span id="downloadButtonText">تحميل التهنئة</span>
                 </a>
@@ -518,14 +519,14 @@
             
             // نصوص للغة العربية
             const arabicTexts = {
-                heading: "عيد أضحى مبارك | Happy Eid Jal",
+                heading: "عيد أضحى مبارك | Happy Eid",
                 arabicLabel: "الاسم باللغة العربية",
                 arabicPlaceholder: "اكتب اسمك هنا...",
                 englishLabel: "الاسم باللغة الإنجليزية",
                 englishPlaceholder: "Enter your name here...",
                 generateButton: "إنشاء التهنئة",
                 loadingText: "جاري إنشاء التهنئة، الرجاء الانتظار...",
-                successMessage: "تم إنشاء تهنئتك الويفزية بنجاح!",
+                successMessage: "تم إنشاء تهنئتك بنجاح!",
                 downloadButton: "تحميل التهنئة",
                 shareTitle: "مشاركة التهنئة:",
                 switchToEnglish: "English",
@@ -534,14 +535,14 @@
             
             // نصوص للغة الإنجليزية
             const englishTexts = {
-                heading: "Happy Eid Al-Adha | عيد مبارك",
+                heading: "عيد أضحى مبارك | Happy Eid",
                 arabicLabel: "Name in Arabic",
                 arabicPlaceholder: "Write your name in Arabic...",
                 englishLabel: "Name in English",
                 englishPlaceholder: "Write your name here...",
                 generateButton: "Generate Greeting",
                 loadingText: "Generating your greeting, please wait...",
-                successMessage: "Your Waves greeting has been created successfully!",
+                successMessage: "Your greeting has been created successfully!",
                 downloadButton: "Download Greeting",
                 shareTitle: "Share Greeting:",
                 switchToEnglish: "English",
