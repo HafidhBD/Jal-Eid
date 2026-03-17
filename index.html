@@ -83,20 +83,6 @@
             100% { opacity: 1; }
         }
 
-        /* هلال رمضان المتوهج */
-        body::after {
-            content: '☪';
-            position: fixed;
-            top: 30px;
-            right: 50%;
-            transform: translateX(50%);
-            font-size: 3rem;
-            color: var(--accent-color);
-            text-shadow: 0 0 20px rgba(201, 168, 76, 0.6), 0 0 40px rgba(201, 168, 76, 0.3);
-            animation: glowPulse 3s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
 
         @keyframes glowPulse {
             0%, 100% { text-shadow: 0 0 20px rgba(201, 168, 76, 0.6), 0 0 40px rgba(201, 168, 76, 0.3); }
@@ -847,8 +833,7 @@
 
             // نصوص للغة العربية
             const arabicTexts = {
-                heading: "رمضان كريم",
-                headingIcon: "🏮",
+                heading: "عيد فطر سعيد",
                 arabicLabel: "الاسم باللغة العربية",
                 arabicPlaceholder: "اكتب اسمك هنا...",
                 englishLabel: "الاسم باللغة الإنجليزية",
@@ -868,8 +853,7 @@
 
             // نصوص للغة الإنجليزية
             const englishTexts = {
-                heading: "Ramadan Kareem",
-                headingIcon: "🏮",
+                heading: "Happy Eid",
                 arabicLabel: "Name in Arabic",
                 arabicPlaceholder: "Write your name in Arabic...",
                 englishLabel: "Name in English",
