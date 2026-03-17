@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تهنئة رمضان | جال</title>
+    <title>تهنئة عيد الفطر | جال</title>
     <link href="https://jal.com.sa/wwwroot/assets/icons/Jal%202.png" rel="icon" sizes="32x32" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -717,7 +717,7 @@
             <div class="step-dot" id="step2Dot"></div>
         </div>
 
-        <h2 id="mainHeading"><span class="heading-icon">🏮</span> رمضان كريم <span class="heading-icon">🏮</span></h2>
+        <h2 id="mainHeading"><span class="heading-icon"></span> عيد فطر سعيد <span class="heading-icon"></span></h2>
 
         <!-- مرحلة إدخال الاسم -->
         <div class="input-group" id="nameInputGroup">
@@ -777,7 +777,7 @@
 
             <div class="download-share-container" id="downloadShareContainer">
                 <div class="action-buttons">
-                    <a download="تهنئة-رمضان-جال.png" href="#" id="downloadButton">
+                    <a download="تهنئة-عيد-جال.png" href="#" id="downloadButton">
                         <i class="fas fa-download"></i>
                         <span id="downloadButtonText">تحميل التهنئة</span>
                     </a>
@@ -1108,8 +1108,8 @@
             function setupShareLinks(name) {
                 const isArabic = htmlElement.getAttribute('dir') === 'rtl';
                 const shareText = isArabic ?
-                    `تهنئة رمضان من ${name} عبر جال! 🌙` :
-                    `Ramadan greetings from ${name} via Jal! 🌙`;
+                    `تهنئة عيد الفطر من ${name} عبر جال! 🌙` :
+                    `Eid greetings from ${name} via Jal! 🌙`;
                 const shareUrl = window.location.href;
 
                 twitterShare.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
