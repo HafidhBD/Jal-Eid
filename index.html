@@ -924,6 +924,7 @@
 
             // دالة لتحديث النصوص حسب اللغة
             function updateTexts(texts) {
+                document.getElementById('mainHeading').innerHTML = texts.heading;
                 document.getElementById('arabicNameLabel').textContent = texts.arabicLabel;
                 document.getElementById('nameInputAr').placeholder = texts.arabicPlaceholder;
                 document.getElementById('englishNameLabel').textContent = texts.englishLabel;
