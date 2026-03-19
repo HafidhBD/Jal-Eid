@@ -126,10 +126,20 @@
             text-align: center;
         }
 
-        .language-switcher {
+        /* القائمة المنسدلة للغات */
+        .language-dropdown {
             position: fixed;
             top: 1rem;
             left: 10px;
+            z-index: 10;
+        }
+
+        body[dir="ltr"] .language-dropdown {
+            left: auto;
+            right: 10px;
+        }
+
+        .language-dropdown-btn {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
             color: white;
             border: none;
@@ -142,22 +152,81 @@
             align-items: center;
             gap: 0.5rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            z-index: 10;
             backdrop-filter: blur(10px);
+            font-family: 'Frutiger LT Arabic', Arial, sans-serif;
         }
 
-        body[dir="ltr"] .language-switcher {
-            left: auto;
-            right: 10px;
-        }
-
-        .language-switcher:hover {
+        .language-dropdown-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-        .language-switcher i {
+        .language-dropdown-btn i {
             font-size: 1rem;
+        }
+
+        .language-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            min-width: 160px;
+            animation: fadeInDropdown 0.25s ease-out;
+            z-index: 20;
+        }
+
+        body[dir="ltr"] .language-dropdown-menu {
+            left: auto;
+            right: 0;
+        }
+
+        .language-dropdown-menu.show {
+            display: block;
+        }
+
+        @keyframes fadeInDropdown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .language-dropdown-item {
+            padding: 0.7rem 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            font-family: 'Frutiger LT Arabic', Arial, sans-serif;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: right;
+        }
+
+        body[dir="ltr"] .language-dropdown-item {
+            text-align: left;
+        }
+
+        .language-dropdown-item:hover {
+            background: rgba(201, 168, 76, 0.1);
+        }
+
+        .language-dropdown-item.active {
+            background: rgba(26, 82, 118, 0.08);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .language-dropdown-item i {
+            width: 18px;
+            text-align: center;
+            font-size: 0.85rem;
         }
 
         .logo {
@@ -660,7 +729,7 @@
                 font-size: 1.2rem;
             }
 
-            .language-switcher {
+            .language-dropdown-btn {
                 padding: 0.4rem 0.8rem;
                 font-size: 0.8rem;
             }
@@ -689,10 +758,27 @@
 <body>
     <div class="container">
         <div class="header-container">
-            <button class="language-switcher" id="languageSwitcher">
-                <i class="fas fa-language"></i>
-                <span>English</span>
-            </button>
+            <div class="language-dropdown" id="languageDropdown">
+                <button class="language-dropdown-btn" id="languageDropdownBtn">
+                    <i class="fas fa-language"></i>
+                    <span id="currentLangLabel">اللغة</span>
+                    <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
+                </button>
+                <div class="language-dropdown-menu" id="languageDropdownMenu">
+                    <button class="language-dropdown-item active" data-lang="ar">
+                        <i class="fas fa-check"></i>
+                        العربية
+                    </button>
+                    <button class="language-dropdown-item" data-lang="en">
+                        <i class="fas fa-check" style="visibility:hidden"></i>
+                        English
+                    </button>
+                    <button class="language-dropdown-item" data-lang="ur">
+                        <i class="fas fa-check" style="visibility:hidden"></i>
+                        اردو
+                    </button>
+                </div>
+            </div>
             <img alt="شعار جال" class="logo" src="https://jal.com.sa/wwwroot/assets/icons/Jal%202.png" />
         </div>
 
@@ -708,7 +794,7 @@
         <!-- مرحلة إدخال الاسم -->
         <div class="input-group" id="nameInputGroup">
             <div class="input-container ar-label">
-                <label for="nameInputAr" id="arabicNameLabel">الاسم باللغة العربية</label>
+                <label for="nameInputAr" id="arabicNameLabel">الاسم باللغة العربية / اوردو</label>
                 <input id="nameInputAr" placeholder="اكتب اسمك هنا..." type="text" />
             </div>
 
@@ -729,6 +815,10 @@
                 <div class="design-option" data-design="en">
                     <img src="designs/2-1.jpeg" alt="English Design">
                     <div class="overlay">English Design</div>
+                </div>
+                <div class="design-option" data-design="ur">
+                    <img src="designs/Urdu.jpeg" alt="اردو ڈیزائن">
+                    <div class="overlay">اردو ڈیزائن</div>
                 </div>
             </div>
         </div>
@@ -817,24 +907,30 @@
             const telegramShare = document.getElementById('telegramShare');
 
             // عناصر تبديل اللغة
-            const languageSwitcher = document.getElementById('languageSwitcher');
+            const languageDropdown = document.getElementById('languageDropdown');
+            const languageDropdownBtn = document.getElementById('languageDropdownBtn');
+            const languageDropdownMenu = document.getElementById('languageDropdownMenu');
+            const langItems = document.querySelectorAll('.language-dropdown-item');
             const htmlElement = document.documentElement;
 
             // متغيرات التطبيق
             let selectedDesign = null;
+            let currentLang = 'ar';
             const designImages = {
                 'ar': 'designs/1-1.jpeg',
-                'en': 'designs/2-1.jpeg'
+                'en': 'designs/2-1.jpeg',
+                'ur': 'designs/Urdu.jpeg'
             };
             const namePositions = {
                 'ar': { ar: { y: 0.76, size: 0.045 }, en: { y: 0.80, size: 0.038 } },
-                'en': { ar: { y: 0.76, size: 0.045 }, en: { y: 0.80, size: 0.038 } }
+                'en': { ar: { y: 0.76, size: 0.045 }, en: { y: 0.80, size: 0.038 } },
+                'ur': { ar: { y: 0.76, size: 0.045 }, en: { y: 0.80, size: 0.038 } }
             };
 
             // نصوص للغة العربية
             const arabicTexts = {
                 heading: "عيد فطر سعيد",
-                arabicLabel: "الاسم باللغة العربية",
+                arabicLabel: "الاسم باللغة العربية / اوردو",
                 arabicPlaceholder: "اكتب اسمك هنا...",
                 englishLabel: "الاسم باللغة الإنجليزية",
                 englishPlaceholder: "Enter your name here...",
@@ -854,7 +950,7 @@
             // نصوص للغة الإنجليزية
             const englishTexts = {
                 heading: "Happy Eid",
-                arabicLabel: "Name in Arabic",
+                arabicLabel: "Name in Arabic / Urdu",
                 arabicPlaceholder: "Write your name in Arabic...",
                 englishLabel: "Name in English",
                 englishPlaceholder: "Write your name here...",
@@ -869,6 +965,32 @@
                 shareTitle: "Share Greeting:",
                 switchToEnglish: "English",
                 switchToArabic: "العربية"
+            };
+
+            // نصوص للغة الأوردو
+            const urduTexts = {
+                heading: "عید الفطر مبارک",
+                arabicLabel: "عربی / اردو میں نام",
+                arabicPlaceholder: "یہاں اپنا نام لکھیں...",
+                englishLabel: "انگریزی میں نام",
+                englishPlaceholder: "Enter your name here...",
+                designTitle: "مبارکباد کا ڈیزائن منتخب کریں",
+                nextButton: "اگلا",
+                backButton: "واپس",
+                generateButton: "مبارکباد بنائیں",
+                loadingText: "مبارکباد بنائی جا رہی ہے، براہ کرم انتظار کریں...",
+                successMessage: "آپ کی مبارکباد کامیابی سے بن گئی!",
+                downloadButton: "مبارکباد ڈاؤن لوڈ کریں",
+                newCardButton: "نیا کارڈ",
+                shareTitle: "مبارکباد شیئر کریں:",
+                switchToEnglish: "English",
+                switchToArabic: "العربية"
+            };
+
+            const langTextsMap = {
+                'ar': arabicTexts,
+                'en': englishTexts,
+                'ur': urduTexts
             };
 
             // دالة لتحميل الخط
@@ -902,24 +1024,25 @@
             }
 
             // دالة تبديل اللغة
-            function toggleLanguage() {
-                const isArabic = htmlElement.getAttribute('dir') === 'rtl';
+            function switchLanguage(lang) {
+                currentLang = lang;
+                const isRTL = (lang === 'ar' || lang === 'ur');
 
-                if (isArabic) {
-                    htmlElement.setAttribute('dir', 'ltr');
-                    htmlElement.setAttribute('lang', 'en');
-                    languageSwitcher.innerHTML = `<i class="fas fa-language"></i><span>${arabicTexts.switchToArabic}</span>`;
-                    updateTexts(englishTexts);
-                    nameInputAr.style.textAlign = 'right';
-                    nameInputEn.style.textAlign = 'left';
-                } else {
-                    htmlElement.setAttribute('dir', 'rtl');
-                    htmlElement.setAttribute('lang', 'ar');
-                    languageSwitcher.innerHTML = `<i class="fas fa-language"></i><span>${englishTexts.switchToEnglish}</span>`;
-                    updateTexts(arabicTexts);
-                    nameInputAr.style.textAlign = 'right';
-                    nameInputEn.style.textAlign = 'left';
-                }
+                htmlElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+                htmlElement.setAttribute('lang', lang);
+                updateTexts(langTextsMap[lang]);
+                nameInputAr.style.textAlign = 'right';
+                nameInputEn.style.textAlign = 'left';
+
+                // تحديث القائمة المنسدلة
+                langItems.forEach(item => {
+                    const isActive = item.getAttribute('data-lang') === lang;
+                    item.classList.toggle('active', isActive);
+                    item.querySelector('i').style.visibility = isActive ? 'visible' : 'hidden';
+                });
+
+                // إغلاق القائمة
+                languageDropdownMenu.classList.remove('show');
             }
 
             // دالة لتحديث النصوص حسب اللغة
@@ -946,9 +1069,12 @@
                 const nameEn = nameInputEn.value.trim();
 
                 if (!nameAr && !nameEn) {
-                    showError(htmlElement.getAttribute('dir') === 'rtl' ?
-                        'الرجاء إدخال الاسم على الأقل في أحد الحقلين' :
-                        'Please enter your name in at least one field');
+                    const errMsgs = {
+                        'ar': 'الرجاء إدخال الاسم على الأقل في أحد الحقلين',
+                        'en': 'Please enter your name in at least one field',
+                        'ur': 'براہ کرم کم از کم ایک فیلڈ میں نام درج کریں'
+                    };
+                    showError(errMsgs[currentLang] || errMsgs['ar']);
                     nameInputAr.focus();
                     return;
                 }
@@ -1009,9 +1135,12 @@
             // دالة إنشاء البطاقة
             async function generateCard() {
                 if (!selectedDesign) {
-                    showError(htmlElement.getAttribute('dir') === 'rtl' ?
-                        'الرجاء اختيار تصميم للتهنئة' :
-                        'Please select a design for the greeting');
+                    const errMsgs = {
+                        'ar': 'الرجاء اختيار تصميم للتهنئة',
+                        'en': 'Please select a design for the greeting',
+                        'ur': 'براہ کرم مبارکباد کا ڈیزائن منتخب کریں'
+                    };
+                    showError(errMsgs[currentLang] || errMsgs['ar']);
                     return;
                 }
 
@@ -1080,9 +1209,12 @@
                     }, 100);
                 } catch (error) {
                     console.error('حدث خطأ:', error);
-                    showError(htmlElement.getAttribute('dir') === 'rtl' ?
-                        'حدث خطأ أثناء إنشاء التهنئة. الرجاء المحاولة مرة أخرى.' :
-                        'An error occurred while generating the greeting. Please try again.');
+                    const errMsgs = {
+                        'ar': 'حدث خطأ أثناء إنشاء التهنئة. الرجاء المحاولة مرة أخرى.',
+                        'en': 'An error occurred while generating the greeting. Please try again.',
+                        'ur': 'مبارکباد بناتے وقت خرابی ہوئی۔ براہ کرم دوبارہ کوشش کریں۔'
+                    };
+                    showError(errMsgs[currentLang] || errMsgs['ar']);
                 } finally {
                     loadingText.style.display = "none";
                 }
@@ -1090,10 +1222,12 @@
 
             // دالة لإعداد روابط المشاركة
             function setupShareLinks(name) {
-                const isArabic = htmlElement.getAttribute('dir') === 'rtl';
-                const shareText = isArabic ?
-                    `تهنئة عيد الفطر من ${name} عبر جال! 🌙` :
-                    `Eid greetings from ${name} via Jal! 🌙`;
+                const shareTexts = {
+                    'ar': `تهنئة عيد الفطر من ${name} عبر جال! 🌙`,
+                    'en': `Eid greetings from ${name} via Jal! 🌙`,
+                    'ur': `جال کی طرف سے ${name} کی عید الفطر کی مبارکباد! 🌙`
+                };
+                const shareText = shareTexts[currentLang] || shareTexts['ar'];
                 const shareUrl = window.location.href;
 
                 twitterShare.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
@@ -1133,7 +1267,25 @@
             backButton.addEventListener('click', goBackToNameInput);
             generateButton.addEventListener('click', generateCard);
             newCardButton.addEventListener('click', startNewCard);
-            languageSwitcher.addEventListener('click', toggleLanguage);
+            // فتح/إغلاق القائمة المنسدلة
+            languageDropdownBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                languageDropdownMenu.classList.toggle('show');
+            });
+
+            // إغلاق القائمة عند الضغط خارجها
+            document.addEventListener('click', function(e) {
+                if (!languageDropdown.contains(e.target)) {
+                    languageDropdownMenu.classList.remove('show');
+                }
+            });
+
+            // اختيار اللغة من القائمة
+            langItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    switchLanguage(this.getAttribute('data-lang'));
+                });
+            });
 
             // اختيار التصميم
             designOptions.forEach(option => {
